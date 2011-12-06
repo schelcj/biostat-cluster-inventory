@@ -1,0 +1,19 @@
+<workbook>
+  <worksheet name="layout">
+    <format bg_color="silver" bold="1">
+      <row>
+        <cell>Rack U</cell>
+        <cell>Rack Location</cell>
+        <cell>Description</cell>
+      </row>
+    </format>
+
+    <loop name="results">
+      <row>
+        <cell><var name="rack_u"/></cell>
+        <cell><var name="rack_loc"/></cell>
+        <cell><var name="host"/></cell>
+      </row>
+    </loop>
+  </worksheet>
+</workbook>
