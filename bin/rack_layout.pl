@@ -1,10 +1,11 @@
 #!/usr/bin/perl
 
+## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+#
 use FindBin qw($Bin);
 use Modern::Perl;
 use Spreadsheet::ParseExcel;
 use Excel::Template;
-use Data::Dumper;
 
 my %racks      = ();
 my $sheet_name = q{Equipment};
@@ -40,14 +41,19 @@ for my $row (($min + 1) .. $max) {
   }
 }
 
-for my $rack (keys %racks) {
+for my $name (keys %racks) {
   my $excel  = Excel::Template->new(filename => qq{$Bin/../templates/rack_layout.xml});
-  my $report = qq{$Bin/../reports/rack_layout-$rack.xls};
-  my $params = {results => [], rack => $rack,};
+  my $report = qq{$Bin/../reports/rack_layout-$name.xls};
+  my $params = {results => [], rack => $name,};
+  my @items  = map {rack_u => $_, rack_loc => 'empty', host => 'empty', empty => 1}, (1 .. 42);
 
-  for my $item (sort {$b->{rack_u} <=> $a->{rack_u}} @{$racks{$rack}}) {
-    push @{$params->{'results'}}, $item;
+  for my $item (@{$racks{$name}}) {
+    $items[$item->{rack_u}] = $item;
   }
+
+  @items = reverse sort {$a->{rack_u} <=> $b->{rack_u}} @items;
+
+  $params->{results} = \@items;
 
   $excel->param($params);
   $excel->write_file($report);

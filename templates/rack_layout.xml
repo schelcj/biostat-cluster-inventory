@@ -9,11 +9,22 @@
     </format>
 
     <loop name="results">
-      <row>
-        <cell><var name="rack_u"/></cell>
-        <cell><var name="rack_loc"/></cell>
-        <cell><var name="host"/></cell>
-      </row>
+      <if name="empty" is="true">
+        <format bg_color="green">
+          <row>
+            <cell><var name="rack_u"/></cell>
+            <cell><var name="rack_loc"/></cell>
+            <cell><var name="host"/></cell>
+          </row>
+        </format>
+      </if>
+      <if name="empty" is="false">
+        <row>
+          <cell><var name="rack_u"/></cell>
+          <cell><var name="rack_loc"/></cell>
+          <cell><var name="host"/></cell>
+        </row>
+      </if>
     </loop>
   </worksheet>
 </workbook>
