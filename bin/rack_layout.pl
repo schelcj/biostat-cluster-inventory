@@ -22,10 +22,15 @@ for my $row (($min + 1) .. $max) {
   my %entry = ();
 
   for my $col (keys %{$col_map}) {
-    $entry{$col} = $sheet->get_cell($row, $col_map->{$col})->value();
+    my $cell = $sheet->get_cell($row, $col_map->{$col});
+
+    if (defined $cell) {
+      $entry{$col} = $cell->value();
+    }
   }
 
   my $rack = delete $entry{rack};
+  next if not $rack;
 
   if ($entry{rack_u} =~ /(\d+)\-(\d+)/) {
     my $start = $1;
@@ -48,7 +53,7 @@ for my $name (keys %racks) {
   my @items  = map {rack_u => $_, rack_loc => 'empty', host => 'empty', empty => 1}, (1 .. 42);
 
   for my $item (@{$racks{$name}}) {
-    $items[$item->{rack_u}] = $item;
+    $items[$item->{rack_u} - 1] = $item;
   }
 
   @items = reverse sort {$a->{rack_u} <=> $b->{rack_u}} @items;
